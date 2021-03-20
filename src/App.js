@@ -3,6 +3,7 @@ import { Switch, Route} from 'react-router-dom';
 //pages
 import Homepage from './page/Homepage';
 import Registration from './page/Registration';
+import Login from './page/Login'
 //layouts
 import MainLayout from './layouts/MainLayout'
 import HomepageLayout from './layouts/HomepageLayout'
@@ -21,6 +22,12 @@ function App() {
         <Route path="/registration" render={()=> (
           <MainLayout>
             <Registration />
+          </MainLayout>
+        )} />
+
+        <Route path="/login" render={()=> (
+          <MainLayout>
+            <Login />
           </MainLayout>
         )} />
       </Switch>

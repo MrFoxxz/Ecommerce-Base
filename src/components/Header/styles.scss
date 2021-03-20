@@ -42,7 +42,13 @@
         }
 
         li {
+            display: inline-block;
             list-style-type: none;
+            margin-right: 1.5rem;
+
+            &:last-child {  /* Para quitar el margen del ultimo elemento "li" */
+                margin-right: 0;
+            }
 
             a {
                 font-size: 1.8rem;
