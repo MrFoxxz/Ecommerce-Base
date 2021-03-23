@@ -15,20 +15,23 @@ const GoogleProvider = new firebase.auth.GoogleAuthProvider();
 GoogleProvider.setCustomParameters({ prompt: 'select_account'})
 export const signInWithGoogle = () => auth.signInWithPopup(GoogleProvider);
 
+/* HACER INICIO DE SESION CON FACEBOOK Inicio Sesión Google */
+
 /* Guardar datos de usuario */
+
 export const handleUserProfile = async (userAuth, additionalData) => {
     if (!userAuth) return;
     const {uid} = userAuth; /* User ID */
 
-    const userRef = firestore.doc(`users/${uid}`); /* Ruta al documento */
+    const userRef = firestore.doc(`users/${uid}`); /* Chequea que el usuario ecista */
     const snapshot = await userRef.get();
 
-    if(!snapshot.exists) {
+    if(!snapshot.exists) {        /* Si no existe, los registra */
         const { displayName, email} = userAuth;
         const timestamp = new Date();
 
         try{
-            await userRef.set({ /* Datos guardados */
+            await userRef.set({ /* Creando un nuevo documento */
                 displayName,
                 email,
                 createdDate: timestamp,
