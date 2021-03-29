@@ -5,9 +5,11 @@ import { auth, handleUserProfile } from './firebase/utils';
 import Homepage from './page/Homepage';
 import Registration from './page/Registration';
 import Login from './page/Login'
+import Recovery from './page/Recovery'
 //layouts
 import MainLayout from './layouts/MainLayout'
 import HomepageLayout from './layouts/HomepageLayout'
+
 import './default.scss';
 
 const initialState = {
@@ -73,6 +75,13 @@ class App extends Component {
               <Login />
             </MainLayout>
           )} />
+
+          <Route exact path="/Recovery" render={()=> (  
+            <MainLayout>
+              <Recovery />
+            </MainLayout>
+          )} />
+
         </Switch>
       </div>
     );
