@@ -1,27 +1,32 @@
-import React, { Component } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Switch, Route, Redirect} from 'react-router-dom';
 import { auth, handleUserProfile } from './firebase/utils';
 import { setCurrentUser } from './redux/User/user.actions';
 
+//hoc
+import WithAuth from './hoc/withAuth';
+
 //pages
 import Homepage from './page/Homepage';
 import Registration from './page/Registration';
-import Login from './page/Login'
-import Recovery from './page/Recovery'
+import Login from './page/Login';
+import Recovery from './page/Recovery';
+import Dashboard from './page/Dashboard';
+
 //layouts
 import MainLayout from './layouts/MainLayout'
 import HomepageLayout from './layouts/HomepageLayout'
 
 import './default.scss';
 
-class App extends Component {
-  authListener = null;
+const App = props => {
 
-  componentDidMount() {  /* Suscribirse */
-    const { setCurrentUser } = this.props;
+  const { setCurrentUser, currentUser } = props;
 
-    this.authListener = auth.onAuthStateChanged( async userAuth => {
+  useEffect(() => {
+
+    const authListener = auth.onAuthStateChanged( async userAuth => {
       if (userAuth) {
         const userRef = await handleUserProfile(userAuth);
         userRef.onSnapshot(snapshot => {
@@ -35,48 +40,55 @@ class App extends Component {
       setCurrentUser(userAuth);
 
     });
-  };
 
-  componentWillUnmount() {  /*  */
-    this.authListener();
-  };
+    return() => {
 
-  render() {
-    const {currentUser} = this.props;
+      authListener();
 
-    return (
-      <div className="App">
-        <Switch>
-          <Route exact path="/" render={()=> (
-            <HomepageLayout >
-              <Homepage />
-            </HomepageLayout>
-          )} />
+    };
+  }, [])
+
+  return (
+    <div className="App">
+      <Switch>
+        <Route exact path="/" render={()=> (
+          <HomepageLayout >
+            <Homepage />
+          </HomepageLayout>
+        )} />
+
+        <Route path="/registration" 
+        render={()=> ( /* Comprueba si hay usuario en sesion y redirecciona */
+          <MainLayout>
+            <Registration />
+          </MainLayout>
+        )} />
+
+        <Route path="/login"
+        render={()=> ( /* Comprueba si hay usuario en sesion y redirecciona */
+          <MainLayout>
+            <Login />
+          </MainLayout>
+        )} />
+
+        <Route exact path="/Recovery" render={()=> (  
+          <MainLayout>
+            <Recovery />
+          </MainLayout>
+        )} />
+
+        <Route exact path="/Dashboard" render={()=> (  
+          <WithAuth>
+            <MainLayout>
+              <Dashboard/>
+            </MainLayout>
+          </WithAuth>
+        )} />
+
+      </Switch>
+    </div>
+  );
   
-          <Route path="/registration" 
-          render={()=> currentUser ? <Redirect to="/" /> : ( /* Comprueba si hay usuario en sesion y redirecciona */
-            <MainLayout>
-              <Registration />
-            </MainLayout>
-          )} />
-  
-          <Route path="/login"
-          render={()=> currentUser ? <Redirect to="/" /> : ( /* Comprueba si hay usuario en sesion y redirecciona */
-            <MainLayout>
-              <Login />
-            </MainLayout>
-          )} />
-
-          <Route exact path="/Recovery" render={()=> (  
-            <MainLayout>
-              <Recovery />
-            </MainLayout>
-          )} />
-
-        </Switch>
-      </div>
-    );
-  }
 }
 
 const mapStateToProps = ({ user }) => ({

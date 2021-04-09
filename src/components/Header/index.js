@@ -22,6 +22,12 @@ const Header = props => {
                 {currentUser && ( /* Si el usuario INICIO sesión */
                     <ul>
                         <li>
+                            <Link to="/Dashboard">
+                                My Account
+                            </Link>
+                        </li>
+
+                        <li>
                             <span onClick={() => auth.signOut()}>
                                 LogOut
                             </span>
@@ -31,6 +37,7 @@ const Header = props => {
 
                 {!currentUser && ( /* Si el usuario NO INICIO sesión */
                     <ul>
+            
                         <li>
                             <Link to="/registration">
                                 Register

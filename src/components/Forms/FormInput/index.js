@@ -1,7 +1,7 @@
 import React from 'react';
 import './styles.scss';
 
-const FormInput = ({ hadleChange, label, ...otherProps}) => {
+const FormInput = ({ handleChange, label, ...otherProps}) => {
     return(
         <div className="formRow">
             {label && (
@@ -10,7 +10,7 @@ const FormInput = ({ hadleChange, label, ...otherProps}) => {
                 </label>
             )}
 
-            <input className="formInput" onChange={hadleChange} {...otherProps} />
+            <input className="formInput" onChange={handleChange} {...otherProps} />
         </div>
     );
 };
